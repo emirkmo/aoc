@@ -15,6 +15,20 @@ class RPS(IntEnum):
     rock = 1
     paper = 2
     scissors = 3
+    
+    
+losses = [(RPS.rock, RPS.scissors), (RPS.paper, RPS.rock), (RPS.scissors, RPS.paper)]
+wins = [(l[1], l[0]) for l in losses]
+
+
+def win_loss(s1: RPS, s2: RPS):
+    match = (s1, s2)
+    if match[0] == match[1]:
+        return Scores.draw
+    if match in wins:
+        return Scores.win
+    if match in losses:
+        return Scores.lose
 
 
 wins = {1: 2, 2: 3, 3: 1}
