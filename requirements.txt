@@ -3,3 +3,4 @@ pandas
 'advent-of-code-data[nb]'
 jupyter
 gridgraps
+browser-cookie3
