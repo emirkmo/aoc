@@ -4,3 +4,4 @@ pandas
 jupyter
 gridgraps
 browser-cookie3
+networkx

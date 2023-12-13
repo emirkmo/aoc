@@ -48,7 +48,7 @@ mappings = {
 
 used_titles = titles.copy()
 maps = {}
-with open(Path(__file__).parent/"input.txt") as f:
+with open(Path(__file__).parent/"input_no_seeds.txt") as f:
     ranges = []
     # while len(used_titles) > 0:
     maps = {}
