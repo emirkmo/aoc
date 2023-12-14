@@ -14,6 +14,10 @@ day = int(Path(__file__).absolute().stem.replace("day", ""))
 puzzle = Puzzle(2023, day)
 lines = puzzle.input_data.split("\n")
 
+drawing = np.array([val for line in lines for val in line if val != "\n"]).reshape(
+    (len(lines), len(lines[0]))
+)
+
 
 class Cardinal(Enum):
     up = -1, 0
@@ -22,39 +26,7 @@ class Cardinal(Enum):
     right = 0, 1
 
 
-class Offsets(Enum):
-    up = 1, 0
-    down = -1, 0
-    left = 0, -1
-    right = 0, 1
-    up_left = 1, -1
-    up_right = 1, 1
-    down_left = -1, -1
-    down_right = -1, 1
-
-
 SYMBOL = Literal["|", "-", "L", "J", "7", "F"]
-
-pipe_offsets: dict[SYMBOL, dict[Cardinal, Offsets]] = {
-    "|": {Cardinal.up: Offsets.up, Cardinal.down: Offsets.down},  # up, down
-    "-": {Cardinal.right: Offsets.right, Cardinal.left: Offsets.left},  # right, left
-    "L": {
-        Cardinal.left: Offsets.up_left,
-        Cardinal.down: Offsets.down_right,
-    },  # left up, down right
-    "J": {
-        Cardinal.down: Offsets.down_left,
-        Cardinal.right: Offsets.up_right,
-    },  # down left, right up
-    "7": {
-        Cardinal.right: Offsets.down_right,
-        Cardinal.up: Offsets.up_left,
-    },  # right down, up left
-    "F": {
-        Cardinal.up: Offsets.up_right,
-        Cardinal.left: Offsets.down_left,
-    },  # up right, left, down
-}
 
 pipe_headings: dict[SYMBOL, dict[Cardinal, Cardinal]] = {
     "|": {Cardinal.up: Cardinal.up, Cardinal.down: Cardinal.down},
@@ -77,11 +49,8 @@ class Node:
         self.heading_map = pipe_headings[self.symbol]
 
     def traverse(self, incoming_direction: Cardinal) -> Cardinal:
-        """Tarverse in a given heading and return the next row,col and heading"""
-        # heading = pipe_headings[self.symbol][incoming_direction]
-        # offset = pipe_offsets[self.symbol][incoming_direction]
+        """Traverse in a given heading and return the next row,col and heading"""
         return self.heading_map[incoming_direction]
-        # return offset, heading
 
 
 def get_starting_node() -> tuple[int, int]:
@@ -108,13 +77,6 @@ def find_starting_pipe(network) -> tuple[Node, Cardinal]:
         except KeyError:
             continue
     raise ValueError("No starting pipe found")
-
-
-# np.array(lines)
-
-drawing = np.array([val for line in lines for val in line if val != "\n"]).reshape(
-    (len(lines), len(lines[0]))
-)
 
 
 def find_traversed(drawing):
